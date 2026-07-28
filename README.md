@@ -46,7 +46,7 @@ A lightweight way for coding agents to accumulate and reference curated Markdown
 
 ## Quick Start
 
-### Try the example
+### 実例を動かす
 
 ```bash
 cd example/
@@ -60,7 +60,7 @@ claude   # Claude Codeを起動
 - 「予約APIのステータスコードを422に変えて」 → 下調べでBundleの落とし穴（フロントは400前提）が検出される
 - 「lintして」 → okf-lintがバンドルの索引・frontmatter・Citationsの整合を検査する
 
-### Use in your project
+### 自分のプロジェクトで使う
 
 ```bash
 cp -r template/ <your-workspace>/    # 雛形一式をコピー
