@@ -1,6 +1,6 @@
-# OKFとAgentic Searchによる軽量Agentic RAG
+# OKFとAgentic Searchによる軽量なナレッジ管理手法
 
-OKFバンドルを、システムファイルのルーティングとサブエージェント/スキルによるAgentic Searchで蓄積・検索する仕組みの設計と意図をまとめる。
+OKFバンドルを、システムファイルのルーティングとサブエージェント/スキルによるAgentic Searchで蓄積・検索する、プロジェクトナレッジ用のアイデア。
 
 ## 1. コンセプト
 

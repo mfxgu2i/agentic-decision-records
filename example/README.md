@@ -1,6 +1,6 @@
 # example — Sakura Cafe
 
-架空のカフェサイト「Sakura Cafe」を題材にした、Lightweight Agentic RAGの動く実例。
+架空のカフェサイト「Sakura Cafe」を題材にした、Agentic Knowledge Bundleの動く実例。
 
 - `knowledge/` — OKFバンドル（仕様書・調査メモ・Runbook・OpenAPI参照資産。純粋なコーパスでツールは同梱しない）
 - `sample-app/` — 文書のCitationsが指すコードスタブ（動作しない。裏取り先として実在させるためのダミー）

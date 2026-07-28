@@ -1,6 +1,6 @@
-# Lightweight Agentic RAG
+# Agentic Knowledge Bundle
 
-A lightweight agentic RAG for curated Markdown knowledge — no vector DB, no pre-indexing, no custom code.
+A lightweight way for coding agents to accumulate and reference curated Markdown knowledge — no vector DB, no pre-indexing, no custom code.
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 

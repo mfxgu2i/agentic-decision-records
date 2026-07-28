@@ -1,6 +1,6 @@
-# Agentic RAG Sample Workspace
+# Agentic Knowledge Bundle Sample Workspace
 
-Claude Codeのハーネスだけでナレッジ検索（軽量Agentic RAG）を成立させるサンプルワークスペース。
+Claude Codeのハーネスだけで、ナレッジの蓄積・参照（Agentic Knowledge Bundle）を成立させるサンプルワークスペース。
 題材は架空のカフェサイト「Sakura Cafe」。
 
 - `sample-app/` — 架空のサイトコード
