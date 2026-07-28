@@ -24,8 +24,3 @@ Andrej Karpathyが2026年4月に公開したパターン（[一次情報: GitHub
 - [Why grep is beating your Vector DB（Shaped.ai）](https://www.shaped.ai/blog/why-grep-is-beating-your-vector-db) — 「エージェントメモリの大部分は実は小規模なMarkdown群で、そこではgrepで十分」
 - [Why I Replaced My AI Agent's Vector Database With grep（DEV Community）](https://dev.to/kuro_agent/why-i-replaced-my-ai-agents-vector-database-with-grep-59mm) — ベクトルDBを捨てた実践記（8ヶ月の本番運用）。移行先は純粋なgrepではなくSQLite FTS5（BM25）+ Markdown + Git + grepの組み合わせである点に注意。
 - [Comparing File Systems and Databases for AI Agent Memory（Oracle）](https://blogs.oracle.com/developers/comparing-file-systems-and-databases-for-effective-ai-agent-memory-management) — ファイルシステムとDBの比較記事。主結論は「共有・スケール時はDBへ移行すべき」であり、「単独開発者規模の知識ストアならファイルシステムで十分」とする整理が本アプローチの個人規模前提の範囲でのみ論拠になる。
-
-## 隣接するが方向が違うアプローチ
-
-- [IWE](https://iwe.md/blog/markdown-knowledge-graph-for-humans-and-agents/) / [qmd](https://knightli.com/en/2026/05/01/qmd-markdown-search-for-ai-agents/) — 同じ課題に「専用CLI・専用インデックスを自作する」方向で答えたもの。本アプローチの「自前実装ゼロ」とは逆方向（IWEはMarkdownをグラフとして扱うRust製CLI、qmdはBM25にベクトル検索+LLMリランキングを併用するハイブリッド）。
-- 日本語圏の記事は「Claude Codeに**ローカルベクトル検索型RAGを足す**」方向が主流（2026-07-24調査時点）で、本アプローチと逆方向。
