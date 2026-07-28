@@ -10,7 +10,7 @@ A lightweight agentic RAG for curated Markdown knowledge — no vector DB, no pr
 
 ## About
 
-ベクトルDBを立てるほどの規模でないキュレーション済みドキュメント群を、**Agentic Searchによる軽量なAgentic RAG**として成立させるアプローチ。自前のagentワークフローを一切実装せず、Claude Codeなどのコーディングエージェントのハーネスに乗せて、**Markdownと設定ファイルだけ**でナレッジ検索系を構成する。
+ベクトルDBを立てるほどの規模でないキュレーション済みドキュメント群を、**Agentic Searchによる軽量なAgentic RAG**として成立させるアプローチ。自前のagentワークフローを一切実装せず、Claude Codeなどのコーディングエージェントのハーネスに乗せて、**Markdownと設定ファイルだけ**でナレッジの蓄積・参照系を構成する。コーディングエージェント向けの設計で、作業しながら得た知見をokf-addで蓄積し、次の作業でokf-queryを通じて効率よく参照する、という単一のループを回す。
 
 ## Philosophy
 
@@ -28,10 +28,12 @@ A lightweight agentic RAG for curated Markdown knowledge — no vector DB, no pr
 
 ## How It Works
 
-1. **ルーティング**: `AGENTS.md` が「Bundleの索引に載る主題に関わる判断はBundleを確認してから確定する」という参照ルールを常時ロードされる場所で宣言する
-2. **検索**: 読取専用サブエージェントが「索引→grep→熟読」を反復し、逐語抜粋＋行番号付き出典＋実体ポインタを返す
-3. **コンテキスト分離**: 探索ログはサブエージェント側に閉じ、依頼元は出典付きの回答だけを受け取る
-4. **メンテナンス**: okf-add（本体＋索引＋履歴のワンセット更新）と okf-lint（適合・整合検査）が索引・メタデータの品質を維持する
+ワークスペースルートの`.claude/`が検索・蓄積・保守のツール一式を持ち、バンドル（`knowledge/`）は純粋なコーパスとして扱う。
+
+1. **蓄積**: 作業中に得た知見を okf-add スキルで登録する。文書本体＋索引＋履歴をワンセットで更新し、OKF適合（frontmatter・非空 `type`）を保つ
+2. **ルーティング**: `AGENTS.md` が「Bundleの索引に載る主題に関わる判断はBundleを確認してから確定する」という参照ルールを常時ロードされる場所で宣言する
+3. **検索**: okf-query サブエージェントが「索引→grep→熟読」を反復し、逐語抜粋＋行番号付き出典＋実体ポインタを返す。探索ログはサブエージェント側に閉じ、依頼元は出典付きの回答だけを受け取る
+4. **保守**: okf-lint スキルが索引の過不足・説明文のずれ・Citations欠落などを検査し、機械的な不整合を修正する
 
 ## Repository Structure
 
@@ -70,13 +72,14 @@ cp -r template/ <your-workspace>/    # 雛形一式をコピー
 2. `knowledge/index.md` — バンドルのタイトルと説明
 3. ナレッジを `knowledge/` に追加していく（Claude Codeで「このメモをokfに入れて」と言えば okf-add が索引・履歴ごと登録する）
 
-バンドルのディレクトリ名を `knowledge/` から変える場合は `.claude/agents/okf-query.md` のGlobパターンも更新すること。
+バンドルのディレクトリ名を `knowledge/` から変える場合は、`.claude/agents/okf-query.md`・`.claude/skills/okf-add/`・`.claude/skills/okf-lint/` のGlobパターンをすべて更新すること。
 
 ## Limitations
 
 - **検索トリガーはエージェントの自己認識に依存**する。検索漏れは誤答として現れ気づきにくい
 - **セッションをまたぐと探索をやり直す**（モデルはステートレス）。コーパスがコンテキストに収まる規模なら全文プリロード（CAG）が代替になり得る
 - **サブエージェント定義はClaude Code固有**。スキル（SKILL.md）は[オープン標準](https://github.com/agentskills/agentskills)のため他ハーネスでも動く見込みだが、サブエージェント定義は他ハーネスでは変換が必要
+- **バンドルはワークスペース側の`.claude/`（検索・蓄積・保守ツール一式）に依存する**。バンドルだけを取り出して単独で使うことはできない
 - 対象は**数十件規模のキュレーション済み文書**。規約が崩れたコーパスでは成り立たず、数百件規模に育つとリコール漏れが顕在化する
 
 ## Prior Art

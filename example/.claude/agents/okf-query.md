@@ -1,6 +1,6 @@
 ---
 name: okf-query
-description: Knowledge Bundle（knowledge/・OKF形式）を検索し、作業の前提となる知識を取り出す検索エージェント。作業（コードや文書の変更・調査・意思決定）前の下調べに使う。逐語抜粋・行番号付き出典・実体ポインタ・落とし穴を返す。Bundleは読み取り専用。
+description: Knowledge Bundle（knowledge/・OKF形式）を検索し、知識を取り出す検索エージェント。「〜について教えて」「どこに書いてある?」等の質問や、作業（コードや文書の変更・調査・意思決定）前の下調べに使う。逐語抜粋・行番号付き出典・実体ポインタ・落とし穴を返す。Bundleは読み取り専用。
 tools: Read, Grep, Glob
 model: sonnet
 ---

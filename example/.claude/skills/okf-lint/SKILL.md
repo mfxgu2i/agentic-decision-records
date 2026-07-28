@@ -5,15 +5,22 @@ description: OKFバンドルの適合性(全.mdのtype必須・予約ファイ�
 
 # okf-lint — バンドル健全性チェック
 
-バンドル全体を OKF v0.1 の適合条件と本バンドルの運用規約(`AGENTS.md`)に照らして検査する。
+バンドル全体を OKF v0.1 の適合条件と本バンドルの運用規約(`knowledge/AGENTS.md`)に照らして検査する。
 **機械的な不整合は修正し、内容に関わる問題は報告にとどめる。**
+
+## バンドルルートの特定
+
+まずカレントディレクトリに`index.md`と知識文書ディレクトリがあればそこがバンドルルート。
+なければGlobで`**/knowledge/index.md`を探して特定する
+(バンドルのディレクトリ名を`knowledge/`から変えた場合はこのパターンを更新すること。
+`.claude/agents/okf-query.md` と `okf-add` のパターンも合わせて更新する)。
 
 ## 検査項目
 
 ### A. OKF 適合(違反は必ず修正)
 
 1. 予約ファイル(`index.md` / `log.md`)以外の全知識文書(.md)がパース可能な YAML frontmatter を持つ。
-   `AGENTS.md` / `CLAUDE.md` と `.claude/` 配下は運用ファイルなので検査対象外
+   `AGENTS.md` / `CLAUDE.md` は運用ファイルなので検査対象外(バンドルは`.claude/`を持たない。ツールはワークスペースルート側にある)
 2. すべての frontmatter に空でない `type` がある
 3. 予約ファイルの構造:
    - ルート `index.md` の frontmatter は `okf_version` 宣言のみ。他の `index.md` に frontmatter がない

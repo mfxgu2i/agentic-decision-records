@@ -26,3 +26,14 @@ okf-queryサブエージェントでBundleを直接Agentic Searchする。
 
 - Bundleとコードの記述が矛盾する場合はコードの現状を正とし、矛盾を発見したことをユーザーに報告する
 - Bundleの更新は人間の確認のうえokf-add / okf-lintスキルの規約に従って行う
+
+## 利用可能なツール
+
+Bundleを検索・追加・検査するツールはワークスペースルート(`.claude/`)で一元管理する。
+Bundle自体はコーパス(データ)のみを持ち、ツールを同梱しない。
+
+| ツール | 種別 | 用途 |
+|---|---|---|
+| `okf-query` | サブエージェント（`.claude/agents/okf-query.md`） | Bundle検索（読み取り専用・逐語抜粋+行番号付き出典） |
+| `okf-add` | スキル（`.claude/skills/okf-add/`） | 文書・参照資産の追加（本体+索引+履歴を一括更新） |
+| `okf-lint` | スキル（`.claude/skills/okf-lint/`） | Bundleの OKF 適合・整合性チェック |

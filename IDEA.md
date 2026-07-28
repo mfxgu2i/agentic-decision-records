@@ -1,10 +1,12 @@
 # OKFとAgentic Searchによる軽量Agentic RAG
 
-OKFバンドルを、システムファイルのルーティングとサブエージェント/スキルによるAgentic Searchで検索する仕組みの設計と意図をまとめる。
+OKFバンドルを、システムファイルのルーティングとサブエージェント/スキルによるAgentic Searchで蓄積・検索する仕組みの設計と意図をまとめる。
 
 ## 1. コンセプト
 
-ベクトルDBを立てるほどの規模でないキュレーション済みドキュメント群を、Agentic Searchによる軽量なAgentic RAGとして成立させるという設計思想。APIもUIも必要としない個人利用を前提に、自前でagentワークフローを実装せずClaude Codeのハーネスに乗せることで、Markdownと設定ファイルだけで検索系を成立させる。
+ベクトルDBを立てるほどの規模でないキュレーション済みドキュメント群を、Agentic Searchによる軽量なAgentic RAGとして成立させるという設計思想。APIもUIも必要としない個人利用を前提に、自前でagentワークフローを実装せずClaude Codeのハーネスに乗せることで、Markdownと設定ファイルだけでナレッジの蓄積・参照系を成立させる。
+
+Claude Codeのハーネス上で作業しながら、得た知見をokf-addでバンドルに蓄積し、次の作業でokf-queryを介して効率よく参照する、という単一の運用ループを回す。「〜について教えて」のようなQA的な質問もokf-queryが受け付けるが、返す情報の粒度はコーディング作業での再利用を前提にした逐語・出典付きのものにする。
 
 ### 用語定義
 
@@ -21,7 +23,7 @@ OKFバンドルを、システムファイルのルーティングとサブエ�
 
 #### 想定ユースケース
 
-APIもUIも必要としない、個人がClaude Codeセッション内で使うナレッジ検索。チーム内の共有はGitリポジトリを想定。
+APIもUIも必要としない、個人がClaude Codeセッション内でコーディング作業をしながら使うナレッジの蓄積・参照。チーム内の共有はGitリポジトリを想定。
 
 #### 対象ドキュメント群
 
@@ -39,9 +41,6 @@ https://github.com/GoogleCloudPlatform/knowledge-catalog/blob/main/okf/SPEC.md
 エージェントループ・ツール実行・サブエージェント分離はClaude Codeのハーネスをそのまま利用し、自前の実行コードを持たない。
 実体はMarkdown（ナレッジ）と設定ファイル（エージェント定義・スキル）のみ。
 
-利用範囲はClaude Codeが起動する環境に限られる。
-サービス化が必要になったら、Claude Agent SDKやMCPサーバー化で拡張する。
-
 #### なぜベクトル検索型RAGにしないか
 
 対象がOKF準拠のバンドルであることが前提にある。OKFが規約として保証する性質が、ベクトル検索型RAGが埋め込みで補おうとするものを構造側で先に解決しているため、事前インデックスを持つ理由がなくなる。
@@ -58,9 +57,11 @@ grepは完全一致のため、語彙的リコールはエージェントの同�
 
 ## 2. システム構成
 
-Claude Codeのハーネスを利用したAgentic Searchシステム。検索の実行はサブエージェントが担い、依頼元エージェントはサブエージェント呼び出しで検索を委譲する。
+Claude Codeのハーネスを利用したAgentic Searchシステム。検索の実行はサブエージェントが、蓄積・保守はスキルが担い、依頼元エージェントはそれぞれの呼び出しでBundleへの読み書きを委譲する。
 
 ### 2.1 全体構成図
+
+検索フローのみを図示する。蓄積フロー(okf-add/okf-lint)は依頼元が同じBundleにスキルで書き込むだけの単純な経路のため省略する。両者は同じBundleを読み書きの両面から扱う。
 
 ```
 ┌────────────────────────────────────────────────────────────────────┐
@@ -79,9 +80,9 @@ Claude Codeのハーネスを利用したAgentic Searchシステム。検索の�
                                                      │ search & read
                                                      ▼
                            ┌──────────────────────────────────────────────────┐
-                           │ OKF Bundle (corpus, read-only)                   │
-                           │ + okf-query skill (for QA, standalone use)       │
+                           │ OKF Bundle (corpus only; read-only for query)    │
                            │ * no pre-built index (no vector DB / embeddings) │
+                           │ * tools (okf-query/add/lint) live outside        │
                            └──────────────────────────────────────────────────┘
 ```
 
@@ -94,20 +95,30 @@ Claude Codeのハーネスを利用したAgentic Searchシステム。検索の�
 | ルーティング | どの情報源をいつ確認するか | AGENTS.md |
 | 検索実行 | Bundleの検索 | サブエージェント（`<workspace>/.claude/agents/okf-query.md`） |
 | 検索戦略 | 情報源の中でどう探すか | 索引 → 検索バリエーション → 熟読 |
+| 蓄積・保守 | Bundleへの追加・整合性維持 | スキル（`<workspace>/.claude/skills/okf-add/`, `okf-lint/`） |
 | コーパス | 検索対象の知識 | OKFバンドル |
 
 ### 2.3 ファイル配置
 
 ```
-<OKFバンドル>/                            ← 単体利用可能
-├── .claude/skills/                      ← okf-query/ okf-add / okf-lint
-├── index.md                             ← 全体索引
-└── AGENTS.md                            ← Bundle運用規約（frontmatter・索引・Citations）
-
-<workspace>/                             ← ワークスペース側のファイル
-├── AGENTS.md                            ← 構成概要 + 参照ルール
-└── .claude/agents/okf-query.md          ← 検索実行サブエージェント
+<workspace>/                             ← ワークスペースルート
+├── AGENTS.md                            ← 構成概要 + 参照ルール + 利用可能なツール一覧
+├── CLAUDE.md                            （@AGENTS.mdを読み込む1行）
+├── .claude/
+│   ├── agents/okf-query.md              ← 検索実行サブエージェント
+│   └── skills/                          ← okf-add / okf-lint（蓄積・保守）
+└── knowledge/                           ← OKFバンドル（コーパスのみ・読み取り専用）
+    ├── index.md                         ← 全体索引
+    ├── log.md                           ← 更新履歴
+    ├── AGENTS.md                        ← Bundle運用規約（frontmatter・索引・Citations）
+    └── <トピック>/, _references/         ← 知識文書・参照資産
 ```
+
+配置の意図:
+
+- **ツールはワークスペースルートに一元管理する**。バンドルは純粋なコーパス(データ)として保ち、ツール(検索・追加・lintの手順書)の更新とバンドルの内容更新を独立に行える。複数バンドルを1ワークスペースに置く場合もツールを共有できる。
+- **ルーティングはAGENTS.mdに置く**。質問が来た瞬間の最初の判断を支配するため、常時ロードされる場所が必要（スキル本文はオンデマンドロードなので間に合わない）。AGENTS.mdは複数エージェント共通規格のため可搬性もある。
+- **トレードオフ**: バンドルはワークスペース側の`.claude/`一式に依存する。バンドルだけを取り出して単独で検索することはできない。
 
 ## 3. 今後の課題
 

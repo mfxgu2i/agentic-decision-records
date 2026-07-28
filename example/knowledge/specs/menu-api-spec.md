@@ -1,5 +1,5 @@
 ---
-type: API Specification
+type: Specification
 title: "メニューAPI仕様"
 description: "メニュー取得APIのエンドポイント仕様（実体は _references/menu-api.yaml）"
 resource: /_references/menu-api.yaml

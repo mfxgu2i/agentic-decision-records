@@ -6,7 +6,14 @@ description: 新しい知識ドキュメントや参照資産(YAML/PDF等)をOKF
 # okf-add — 文書追加ワークフロー
 
 バンドルに知識を1件追加する。**本体 + 索引 + 履歴をワンセット**で更新し、
-OKF v0.1 適合(全 .md に非空 `type`)を保つ。作業前に `AGENTS.md` の絶対ルールを確認すること。
+OKF v0.1 適合(全 .md に非空 `type`)を保つ。作業前に `knowledge/AGENTS.md` の絶対ルールを確認すること。
+
+## バンドルルートの特定
+
+まずカレントディレクトリに`index.md`と知識文書ディレクトリがあればそこがバンドルルート。
+なければGlobで`**/knowledge/index.md`を探して特定する
+(バンドルのディレクトリ名を`knowledge/`から変えた場合はこのパターンを更新すること。
+`.claude/agents/okf-query.md` と `okf-lint` のパターンも合わせて更新する)。
 
 ## 手順
 
@@ -22,9 +29,9 @@ OKF v0.1 適合(全 .md に非空 `type`)を保つ。作業前に `AGENTS.md` �
 
 ### 2. frontmatter を付ける
 
-`AGENTS.md` のテンプレートに従う。要点:
+`knowledge/AGENTS.md` のテンプレートに従う。要点:
 
-- `type`: 必須。既存語彙(AGENTS.md 参照)を優先し、合うものがなければ内容を表す短い英語を新設
+- `type`: 必須。既存語彙(`knowledge/AGENTS.md` 参照)を優先し、合うものがなければ内容を表す短い英語を新設
 - `description`: 一文。**索引エントリの説明文としてそのまま使う**ので単独で意味が通ること
 - `timestamp`: 追加日の ISO 8601(`+09:00`)
 - `resource`: `_references/` の実体や外部資産を説明する文書のみ(例: `resource: /_references/xxx.yaml`)
@@ -37,13 +44,13 @@ OKF v0.1 適合(全 .md に非空 `type`)を保つ。作業前に `AGENTS.md` �
 - コード上の実体(ファイルパス)・一次資料・一次観測(実機検証やDBクエリ結果)・未確認の
   推測に由来する記述があれば、文書末尾の `# Citations` が**必須**。番号付きで列挙し、
   本文の該当箇所に `[1]` を添える。判定は `type` ではなく本文の内容で行う。詳細な書式は
-  `AGENTS.md` の「Citations — 出典を要する主張があれば必須」を参照
+  `knowledge/AGENTS.md` の「Citations — 出典を要する主張があれば必須」を参照
 - バンドル内で自己完結する文書(用語定義・方針宣言など)には不要
 
 ### 4. 索引を更新する
 
 - ルート `index.md` の該当セクションに追加(ファイル名順の位置に挿入):
-  `* [タイトル](specs/xxx.md) - <frontmatter の description と同文>`
+  `* [タイトル](/specs/xxx.md) - <frontmatter の description と同文>`
 - `_references/` に置いた場合は `_references/index.md` にも同様に追加
   (それ以外のディレクトリにはディレクトリ別 `index.md` を置かない)
 - 新しい種類の知識でセクションが必要になったら `# 見出し` を新設してよい
