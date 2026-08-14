@@ -1,7 +1,7 @@
 ---
 type: Design Doc
 title: "システム全体アーキテクチャ設計"
-description: "Sakura Cafeサイトの全体構成（Next.js + ヘッドレスCMS + CDN）と主要な設計判断"
+description: "Sakura Cafeサイトの全体構成と主要な設計判断。Next.js・ヘッドレスCMS・CDN"
 tags: [architecture, nextjs, cms, cdn]
 timestamp: 2026-07-24T00:00:00+09:00
 ---
@@ -21,7 +21,7 @@ timestamp: 2026-07-24T00:00:00+09:00
 
 ## 主要な設計判断
 
-- **予約データを永続化しない**: 予約はメール通知のみでDBを持たない。店舗側の台帳が正。
+- 予約データを永続化しない: 予約はメール通知のみでDBを持たない。店舗側の台帳が正。
   規模が小さくシステムを増やさないことを優先した
-- **画像URL変換の一元化**: CMSの生URLを直接使わず必ず `getMenuImageUrl()` を通す。
+- 画像URL変換の一元化: CMSの生URLを直接使わず必ず `getMenuImageUrl()` を通す。
   CDN移行・ドメイン変更時の影響範囲をこの1関数に閉じ込めるため

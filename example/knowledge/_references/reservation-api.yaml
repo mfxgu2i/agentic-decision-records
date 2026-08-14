@@ -1,0 +1,63 @@
+openapi: "3.0.3"
+info:
+  title: Sakura Cafe Reservation API
+  version: "1.0.0"
+paths:
+  /api/reservation:
+    post:
+      summary: 席予約を受け付ける
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/ReservationRequest"
+      responses:
+        "200":
+          description: 受付完了（確認メール送信済み）
+          content:
+            application/json:
+              schema:
+                type: object
+                required: [ok]
+                properties:
+                  ok:
+                    type: boolean
+        "400":
+          description: |
+            バリデーション失敗。422ではなく400を返す。
+            フロントのエラーハンドリングが400前提のため変更不可（/specs/reservation-spec.md 参照）
+          content:
+            application/json:
+              schema:
+                type: object
+                required: [error]
+                properties:
+                  error:
+                    type: string
+                    enum: [validation_failed]
+components:
+  schemas:
+    ReservationRequest:
+      type: object
+      required: [name, email, date, partySize]
+      properties:
+        name:
+          type: string
+          minLength: 1
+          maxLength: 50
+        email:
+          type: string
+          format: email
+        date:
+          type: string
+          format: date
+          description: 当日から90日先まで
+        partySize:
+          type: integer
+          minimum: 1
+          maximum: 8
+          description: 9名以上は電話案内のみ（システム外運用）
+        note:
+          type: string
+          maxLength: 500
