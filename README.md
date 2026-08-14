@@ -25,7 +25,7 @@ A lightweight way for coding agents to accumulate and reference curated Markdown
 
 ### OKFが検索品質を担保する
 
-バンドルは [OKF (Open Knowledge Format) v0.1](https://github.com/GoogleCloudPlatform/knowledge-catalog/blob/main/okf/SPEC.md) に準拠する。良質な索引・frontmatter・1ファイル1トピックという規約が、ベクトル検索型RAGが埋め込みで補おうとする問題を構造側で先に解決する。
+バンドルは [OKF (Open Knowledge Format) v0.1](https://github.com/GoogleCloudPlatform/knowledge-catalog/blob/ee67a5ca27/okf/SPEC.md) に準拠する。良質な索引・frontmatter・1ファイル1トピックという規約が、ベクトル検索型RAGが埋め込みで補おうとする問題を構造側で先に解決する。
 
 ## How It Works
 

@@ -8,7 +8,7 @@
 - [Karpathy「LLM Wiki」 GitHub Gist](https://gist.github.com/karpathy/442a6bf555914893e9891c11519de94f) — 構造化Markdown wikiをClaude Codeでagentic検索する。raw sources / wiki / schema の3層と ingest・query・lint の3操作を提唱。最も近い先行事例
   - 解説: [MindStudio](https://www.mindstudio.ai/blog/andrej-karpathy-llm-wiki-knowledge-base-claude-code) / [HackerNoon](https://hackernoon.com/how-i-built-a-self-maintaining-knowledge-base-for-6-projects-using-claude-code-and-karpathys-llm-wiki)、6プロジェクトでの運用記 / [Starmorph](https://blog.starmorph.com/blog/karpathy-llm-wiki-knowledge-base-guide)
 - [Open Knowledge Format (OKF) v0.1、Google Cloud](https://github.com/GoogleCloudPlatform/knowledge-catalog/tree/main/okf) — 本バンドルが準拠する仕様。LLM Wikiパターンをvendor-neutralに形式化したもの。[発表記事](https://cloud.google.com/blog/products/data-analytics/how-the-open-knowledge-format-can-improve-data-sharing)
-  - [okf.md](https://okf.md/) — リファレンスサイト。仕様は2026年8月時点でもv0.1ドラフトのまま。クライアントサイドのvalidatorと、MCPサーバとしても動く公式CLIの`kcmd`がある
+  - [okf.md](https://okf.md/) — リファレンスサイト。クライアントサイドのvalidatorと、MCPサーバとしても動く公式CLIの`kcmd`がある。FAQはv0.1ドラフトと記載しているが、仕様リポジトリのmainは2026年7月にv0.2へ移行済みで条番号も動いている
   - [W3C Holon Graph Community Group](https://www.w3.org/community/holon/) — 2026年6月に活動開始。[DataBook仕様](https://github.com/w3c-cg/holon)はOKFと同じMarkdown + YAML frontmatterの設計を共有し、IRI識別子やSPARQL問い合わせといった形式意味論を上乗せする
 - [Inkeep OpenKnowledge](https://github.com/inkeep/open-knowledge) — OKFバンドル向けのローカルファーストMarkdown IDEと、各ハーネスの自動配線
 - [openknowledge-sh/openknowledge](https://github.com/openknowledge-sh/openknowledge) — OKFバンドル管理CLI

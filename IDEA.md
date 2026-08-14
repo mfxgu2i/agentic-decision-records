@@ -30,8 +30,9 @@ APIもUIも必要としない、個人がClaude Codeセッション内でコー�
 #### 対象ドキュメント群
 
 数十件規模の人手整備されたMarkdown。良質な索引とメタ情報を持つ。メタ情報はtype / tags / timestamp。
-OKF (Open Knowledge Format) v0.1 に準拠する:
-https://github.com/GoogleCloudPlatform/knowledge-catalog/blob/main/okf/SPEC.md
+OKF (Open Knowledge Format) v0.1 に準拠する。`blob/main` は現在 v0.2 を指し条番号がずれるため、
+参照はv0.1のコミットに固定する:
+https://github.com/GoogleCloudPlatform/knowledge-catalog/blob/ee67a5ca27/okf/SPEC.md
 
 #### 収録範囲の判断基準
 
@@ -49,7 +50,8 @@ https://github.com/GoogleCloudPlatform/knowledge-catalog/blob/main/okf/SPEC.md
 
 ##### 運用ルールへの反映 
 `okf-add`の手順1で収録すべき内容かを確認し、本文執筆ルールとCitations規約・自己検査、および`okf-lint`の報告項目C.13/C.14として明文化している。
-いずれもスキル側が持ち、バンドルからは読まない。§2.3「依存は一方向にする」を参照。
+いずれもスキル側が持ち、バンドルからは読まない。ツールはワークスペースルート側にあり、
+バンドルはコーパスだけを持つ。§2.3を参照。
 
 #### 検索方針
 
@@ -186,6 +188,13 @@ grepは完全一致のため、質問と文書の表記ゆれで取りこぼす�
 #### 改善案
 
 - CAG (Cache-Augmented Generation) の併用。コーパスがコンテキストに収まる規模なら、全文をコンテキストに載せて探索ループ自体を省く
+
+### OKF v0.2への追随
+
+2026年7月に v0.2 が公開され、仕様リポジトリの`blob/main`はそちらを指すようになった。
+条番号も動いており、v0.1の§9 適合は§11、§6 索引は§8、§11 バージョニングは§12になっている。
+本バンドルはv0.1準拠のままとし、リポジトリ内の参照リンクはv0.1のコミットに固定してある。
+v0.2との差分を確認して追随するかどうかは未検討。
 
 ### ハーネス固有性
 
