@@ -8,6 +8,8 @@
 - [Karpathy「LLM Wiki」 GitHub Gist](https://gist.github.com/karpathy/442a6bf555914893e9891c11519de94f) — 構造化Markdown wikiをClaude Codeでagentic検索する。raw sources / wiki / schema の3層と ingest・query・lint の3操作を提唱。最も近い先行事例
   - 解説: [MindStudio](https://www.mindstudio.ai/blog/andrej-karpathy-llm-wiki-knowledge-base-claude-code) / [HackerNoon](https://hackernoon.com/how-i-built-a-self-maintaining-knowledge-base-for-6-projects-using-claude-code-and-karpathys-llm-wiki)、6プロジェクトでの運用記 / [Starmorph](https://blog.starmorph.com/blog/karpathy-llm-wiki-knowledge-base-guide)
 - [Open Knowledge Format (OKF) v0.1、Google Cloud](https://github.com/GoogleCloudPlatform/knowledge-catalog/tree/main/okf) — 本バンドルが準拠する仕様。LLM Wikiパターンをvendor-neutralに形式化したもの。[発表記事](https://cloud.google.com/blog/products/data-analytics/how-the-open-knowledge-format-can-improve-data-sharing)
+  - [okf.md](https://okf.md/) — リファレンスサイト。仕様は2026年8月時点でもv0.1ドラフトのまま。クライアントサイドのvalidatorと、MCPサーバとしても動く公式CLIの`kcmd`がある
+  - [W3C Holon Graph Community Group](https://www.w3.org/community/holon/) — 2026年6月に活動開始。[DataBook仕様](https://github.com/w3c-cg/holon)はOKFと同じMarkdown + YAML frontmatterの設計を共有し、IRI識別子やSPARQL問い合わせといった形式意味論を上乗せする
 - [Inkeep OpenKnowledge](https://github.com/inkeep/open-knowledge) — OKFバンドル向けのローカルファーストMarkdown IDEと、各ハーネスの自動配線
 - [openknowledge-sh/openknowledge](https://github.com/openknowledge-sh/openknowledge) — OKFバンドル管理CLI
 - [Astro-Han/karpathy-llm-wiki](https://github.com/Astro-Han/karpathy-llm-wiki) — Agent Skills互換のLLM wiki実装
@@ -17,6 +19,9 @@
 
 - [Boris Cherny（Claude Code作者）の投稿](https://x.com/bcherny/status/2017824286489383315) — 初期のClaude CodeはRAG+ローカルベクトルDBだったがagentic searchに切り替えた経緯。理由はsecurity / privacy / staleness / reliability
 - [Keyword search is all you need、Amazon, AAAI 2026](https://www.amazon.science/publications/keyword-search-is-all-you-need-achieving-rag-level-performance-without-vector-databases-using-agentic-tool-use) — ベクトルDBなしのagentic keyword searchでRAGの90%超の性能
+- [Beyond Semantic Similarity、arXiv:2605.05242](https://arxiv.org/abs/2605.05242) — 汎用ターミナルツールでコーパスを直接操作するdirect corpus interaction (DCI)が、埋め込みもベクトルインデックスも使わずに従来のretrieverを大きく上回ると報告。本アプローチと同じ立場に付いた名前と実証
+- [Is Grep All You Need?、arXiv:2605.15184](https://arxiv.org/abs/2605.15184) — grepとベクトル検索を複数のハーネスで比較。grep優位が成立するのは検索結果をコンテキストに直接載せる場合のみで、エージェントがファイルを開き直す形式では10組中5組で逆転する。ハーネスを替えるだけで同一モデル・同一検索方式でも93.1%対76.7%と、検索方式を替えるのと同規模の差が出る
+- [SAAS、arXiv:2605.29796](https://arxiv.org/abs/2605.29796) — 検索の失敗をunder-searchとover-searchの2軸で扱う枠組み。必要時のみ検索する方針はover-search回避として位置づけられる
 - [Adaptive-RAG、Jeong et al., NAACL 2024](https://arxiv.org/abs/2403.14403) — 質問の複雑さに応じて検索戦略を切り替える
 - [Self-RAG、Asai et al.](https://arxiv.org/abs/2310.11511) — 生成しながら検索要否と妥当性を自己評価する
 - [Agentic RAG Survey、arXiv:2501.09136](https://arxiv.org/abs/2501.09136) — 用語の出典
@@ -36,6 +41,7 @@
 
 - [Agent Skills、agentskills.io](https://github.com/agentskills/agentskills) — SKILL.md のオープン標準
 - [AGENTS.md](https://agents.md/) — Agentic AI Foundation がsteward
+- [Agent Plugins 1.0.0](https://github.com/agentplugins/agent-plugins-spec) — 2026年8月6日公開のプラグイン配布標準。ChatGPT / Codex / Cursor / Copilot / Kiro / VS Codeが採用。可搬な構成要素はskillsとMCPサーバの2種のみで、subagent・hooks・commandsは形式が収束していないとして対象外。Claude Codeは`.claude-plugin/`という別レイアウトを使う
 
 ## 別方式の実装
 
