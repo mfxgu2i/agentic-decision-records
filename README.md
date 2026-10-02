@@ -1,94 +1,110 @@
-# Agentic Knowledge Bundle
+# Agentic Project Records
 
-A lightweight way for coding agents to accumulate and reference curated Markdown knowledge — no vector DB, no pre-indexing, no custom code.
+A lightweight, shareable project context for coding agents — user-curated decisions (ADRs), runbooks, and open issues kept as plain Markdown in your repo. No database, no custom code.
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 
 ## Documentation
 
-📄 設計思想・システム構成は [IDEA.md](IDEA.md) に収録。
-関連する先行事例・研究へのポインタは [docs/prior-art.md](docs/prior-art.md) に収録。
+📄 コンセプトや設計方針は [IDEA.md](IDEA.md) にまとめています。記録スキルの本体は [skills/record/](skills/record/) にあります。導入の手順は、このページの Quick Start を参照してください。
 
 ## About
 
-ベクトルDBを立てるほどの規模でないキュレーション済みドキュメント群を、Agentic Searchによる軽量なAgentic RAGとして成立させるアプローチ。自前のagentワークフローを一切実装せず、Claude Codeなどのコーディングエージェントのハーネスに乗せて、Markdownと設定ファイルだけでナレッジの蓄積・参照系を構成する。コーディングエージェント向けの設計で、作業しながら得た知見をokf-addで蓄積し、次の作業でokf-queryを通じて効率よく参照するという単一のループを回す。
+小規模なプロジェクトの意思決定や作業に必要な知見を蓄積して共有するための仕組みです。ユーザーが残すと決めた内容をMarkdownでリポジトリに記録します。セッション終了後にコンテキストがリセットされたり、別のメンバーやハーネスが作業を引き継いだりしても、同じ記録をもとに作業を再開できます。
+
 
 ## Philosophy
 
-### 事前インデックスを持たない
+### 記録は3種類に限定する
 
-エージェントが「索引で当たりをつける → grepで絞る → 該当文書を全文read」を反復するAgentic Searchで検索する。再インデックス不要で常に最新のファイル状態が検索され、出典パス付きで回答が検証できる。
+| 種類 | 答える問い | 書いたあとの扱い |
+|---|---|---|
+| ADR | なぜこうなっているのか | 書き換えない。変えるときは新しいADRで置き換える |
+| runbook | どうやるのか | 実行して手順が違っていたら直す |
+| issue | 何が未解決なのか | 解決したら削除する。決定事項があればADRに記録する |
 
-### 自前実装ゼロ
+「その他」に分類する種類は設けません。どれにも当てはまらない内容を頼まれた場合、エージェントは記録が本当に必要かを確認し、コードのコメントやREADMEなど、適切な置き場所を提案します。
 
-エージェントループ・ツール実行・サブエージェント分離はコーディングエージェントのハーネスをそのまま使う。実体はナレッジのMarkdownと、エージェント定義・スキルの設定ファイルだけ。
+### 内容はユーザーがキュレーションする
 
-### OKFが検索品質を担保する
+エージェントが独自の判断で記録を追加することはありません。何を残すかはユーザーが決め、エージェントは文章を生成します。記録はチーム全員のコンテキストに常時含まれるため、内容は人が選びます。
 
-バンドルは [OKF (Open Knowledge Format) v0.1](https://github.com/GoogleCloudPlatform/knowledge-catalog/blob/ee67a5ca27/okf/SPEC.md) に準拠する。良質な索引・frontmatter・1ファイル1トピックという規約が、ベクトル検索型RAGが埋め込みで補おうとする問題を構造側で先に解決する。
+### リポジトリで共有する
+
+各ハーネスのメモリ機能は、記録した本人のマシン内で使われます。一方、この仕組みでは記録をリポジトリに置くため、チーム全員と各自のエージェントが同じ内容を読むことができます。個人の好みはハーネスのメモリに、プロジェクトの決定はリポジトリに記録します。
 
 ## How It Works
 
-ワークスペースルートの`.claude/`が検索・蓄積・保守のツール一式を持ち、バンドルの`knowledge/`は純粋なコーパスとして扱う。
+```
+@docs/records/index.md
+```
 
-### 1. 蓄積
-作業中に得た知見を okf-add スキルで登録する。文書本体・索引・履歴をワンセットで更新し、frontmatterと非空の `type` というOKF適合条件を保つ
-### 2. ルーティング
-`AGENTS.md` が `knowledge/index.md` を `@import` して収録トピック一覧を常時ロードし、「このトピックに関わる判断はBundleを確認してから確定する」という参照ルールを宣言する
-### 3. 検索
-okf-query サブエージェントが「索引→grep→熟読」を反復し、逐語抜粋と行番号付き出典、実体ポインタを返す。探索ログはサブエージェント側に閉じ、依頼元は出典付きの回答だけを受け取る
-### 4. 保守
-okf-lint スキルが索引の過不足・説明文のずれ・Citations欠落などを検査し、機械的な不整合を修正する
+この1行によって、セッション開始時に索引の内容がコンテキストへ読み込まれます。エージェントは何が記録されているかを把握した状態で作業を始めます。
+
+### 1. 記録する
+
+記録したい内容があれば、「残しておいて」と頼みます。recordスキルが既存の記録と重複しないかを確認して種類を選び、本文を作成して索引に1行追加します。3種類のどれにも当てはまらない場合は、記録する前に確認します。
+
+### 2. 読む
+
+関連する作業を始める前に、エージェントは索引から該当する記録を見つけ、全文を読みます。これから行う変更がADRに反する場合やissueに関係する場合は、作業を進める前にユーザーへ伝えます。
+
+### 3. 記録を更新する
+
+ADRは書き換えず、新しいADRで置き換えます。古いADRには `status: superseded` を設定し、索引から外します。runbookは必要に応じて更新し、issueは解決したら削除します。索引には有効な記録だけを残します。
 
 ## Repository Structure
 
 | パス | 内容 |
 |---|---|
-| [IDEA.md](IDEA.md) | 正本。設計思想・システム構成・今後の課題を1ファイルに収録 |
-| [docs/prior-art.md](docs/prior-art.md) | 関連する先行事例・研究・実装へのポインタ集 |
-| [template/](template/) | 自分のプロジェクトにコピーして使う雛形。空のバンドル骨格と設定一式 |
-| [example/](example/) | 動く実例。架空のカフェサイト「Sakura Cafe」のナレッジバンドルとコードスタブ |
+| [IDEA.md](IDEA.md) | コンセプト、設計方針、検索戦略、構成、制約 |
+| [skills/record/](skills/record/) | 記録スキルの正本。`SKILL.md` と、`AGENTS.md` に足す節の原文 `AGENTS-md-section.md` |
+| [example/](example/) | 架空のカフェサイト「Sakura Cafe」に導入した実例。記録も含む |
 
 ## Quick Start
 
-### 実例を動かす
+### 実例を試す
 
 ```bash
 cd example/
 claude   # Claude Codeを起動
 ```
 
-試しに聞いてみる:
+次のように依頼して動作を確認できます。
 
-- 「予約フォームのバリデーション仕様を教えて」 → `specs/reservation-spec.md` 経由で実体の `_references/reservation-api.yaml` にたどり着く
-- 「メニュー画像が更新されないんだけど」 → 調査メモの原因とRunbookのキャッシュパージ手順にたどり着く
-- 「予約APIのステータスコードを422に変えて」 → 下調べでBundleの落とし穴を検出する。フロントは400前提で書かれている
-- 「lintして」 → okf-lintがバンドルの索引・frontmatter・Citationsの整合を検査する
+| 頼むこと | 起きること |
+|---|---|
+| 「予約をDBに保存するようにして」 | 保存しないと決めたADRに当たり、理由を示して進めてよいかを確認してくる |
+| 「メニュー画像が更新されないんだけど」 | issueに書かれた原因と、runbookのキャッシュパージにたどり着く |
+| 「画像URLにハッシュを付けて」 | 恒久対処の方式が未決だというissueに当たり、進める前に伝えてくる |
+| 「画像はWebPに統一することにした。残しておいて」 | recordがADRを1件書き、索引に足す |
 
-### 自分のプロジェクトで使う
+### 自分のプロジェクトに導入する
 
-```bash
-cp -r template/ <your-workspace>/    # 雛形一式をコピー
-```
+プロジェクトに置くのはスキルだけです。残りはスキルが用意します。
 
-そのあと3箇所を書き換える:
+1. [skills/record/](skills/record/) を、プロジェクトの `.claude/skills/record/` にディレクトリごとコピーします
+2. 新しいセッションで「記録の仕組みをセットアップして」と依頼します。スキルが索引と `AGENTS.md` の節を用意します
+3. セッションを開き直し、「記録の索引には何が載っている？」と聞きます。索引の内容が返れば導入できています
 
-1. `AGENTS.md` — `<プロジェクト名>` 等のプレースホルダを自分のプロジェクトに合わせる
-2. `knowledge/index.md` — バンドルのタイトルと説明
-3. ナレッジを `knowledge/` に追加していく。Claude Codeで「このメモをokfに入れて」と言えば okf-add が索引・履歴ごと登録する
+スキルが用意するのは次の2つです。
 
-バンドルのディレクトリ名を `knowledge/` から変える場合は、`.claude/skills/okf-query/`・`.claude/skills/okf-add/`・`.claude/skills/okf-lint/` のGlobパターンをすべて更新すること。
+| 用意するもの | 中身 |
+|---|---|
+| `docs/records/index.md` | 空の索引 |
+| `AGENTS.md` の節 | 記録を読むルールと、索引を引用する1行 `@docs/records/index.md` |
+
+既存の `AGENTS.md` は上書きせず、末尾に節を追加します。手順2を行わなくても、最初に「残しておいて」と依頼した時点で、スキルが同じ準備を行います。
+
+手順3で索引の内容が返らない場合は、`AGENTS.md` が読み込まれていません。[IDEA.md](IDEA.md) の「ハーネスへの依存」を確認してください。
+
+あとは作業を進めながら記録を蓄積します。「この決定を残しておいて」と依頼すると、recordスキルが `docs/records/adr/` に記録し、索引に追加します。
 
 ## Limitations
 
-- 検索トリガーはエージェントの自己認識に依存する。検索漏れは誤答として現れ気づきにくい
-- セッションをまたぐと探索をやり直す。モデルはステートレスなため。コーパスがコンテキストに収まる規模なら全文プリロードのCAGが代替になり得る
-- サブエージェント定義はClaude Code固有。スキルのSKILL.mdは[オープン標準](https://github.com/agentskills/agentskills)のため他ハーネスでも動く見込みだが、サブエージェント定義は変換が必要
-- 対象は数十件規模のキュレーション済み文書。規約が崩れたコーパスでは成り立たず、数百件規模に育つとリコール漏れが顕在化する
-
-## Prior Art
-
-近いのは [Karpathy の LLM Wiki](https://gist.github.com/karpathy/442a6bf555914893e9891c11519de94f)。構造化Markdown wikiをClaude Codeでagentic検索する。他の関連事例へのポインタは [docs/prior-art.md](docs/prior-art.md) を参照。
+- 記録を読むかどうかはエージェントの指示遵守に依存します。読み込みを強制する仕組みはありません
+- 小規模なプロジェクトを対象としています。索引を常時読み込むため、200行を超える規模は想定していません
+- 索引の `@import` と `.claude/skills/` へのスキル配置はClaude Code固有です。一方、`SKILL.md` 自体は[オープン標準](https://github.com/agentskills/agentskills)で、記録も通常のMarkdownです。そのため、ほかのハーネスでもスキルの配置先を変えれば利用できます
 
 ## License
 
