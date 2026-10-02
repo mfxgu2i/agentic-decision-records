@@ -31,5 +31,5 @@ claude
 
 このディレクトリには、[README](../README.md) の導入手順をそのまま適用しています。
 `.claude/skills/record` は、リポジトリ直下の [skills/record/](../skills/record/) を指すシンボリックリンクです。スキルの正本はそちらにあります。
-`AGENTS.md` の「プロジェクトの記録」の節は、`skills/record/AGENTS-md-section.md` と同じ内容に保ちます。変更するときは `AGENTS-md-section.md` を先に直し、その内容をこちらに反映してください。
+`AGENTS.md` の「プロジェクトの記録」の節は、`skills/record/references/setup.md` にある節の原文と同じ内容に保ちます。変更するときは `setup.md` を先に直し、その内容をこちらに反映してください。
 このexample固有の内容は、`docs/records/` と `sample-app/` だけです。
