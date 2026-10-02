@@ -1,43 +1,21 @@
-# Agentic Knowledge Bundle Sample Workspace
+# Agentic Project Records Sample Workspace
 
-Claude Codeのハーネスだけで、ナレッジの蓄積・参照を成立させるサンプルワークスペース。
+意思決定、手順、未解決の問題をリポジトリで共有するサンプルワークスペース。
 題材は架空のカフェサイト「Sakura Cafe」。
 
-- `sample-app/` — 架空のサイトコード
-- `knowledge/` — Knowledge Bundle
+| パス | 内容 |
+|---|---|
+| `sample-app/` | 架空のサイトコード |
+| `docs/records/` | このプロジェクトの意思決定、手順、未解決の問題 |
 
-## 情報参照のルール
+## プロジェクトの記録
 
-下記の収録トピックに関わる判断・変更は、okf-queryサブエージェントで該当文書を確認してから確定すること。
-コード等の直接調査と並行してよい。対象と変更内容が明確な単純作業では省略してよい
+`docs/records/` に、このプロジェクトの決定、手順、未解決の問題が記録されている。末尾はその索引で、リンクは `docs/records/` を起点とする。
+索引が展開されていなければ、作業の最初に `docs/records/index.md` を読む。
 
-収録トピック。`knowledge/index.md`の内容で、先頭の`okf_version`行はOKF仕様上のfrontmatter宣言なので読み飛ばしてよい:
+- 作業に関係する記録が索引にあれば、全文を読んでから進める
+- 索引に見当たらない主題は、`docs/records/` を検索してから「記録がない」と判断する
+- これから行う変更が記録に反する、または未解決の問題に関わるなら、進める前にユーザーに伝える
+- 記録の追加、更新、削除は、ユーザーに頼まれたときだけ行う。直接編集せず、record スキルを使う
 
-@knowledge/index.md
-
-### Knowledge Bundle
-
-okf-queryサブエージェントでBundleを直接Agentic Searchする。
-質問は具体的に書き、出典パス付きの回答を求めること。
-
-- Bundleに基づいて回答する際は、根拠となる文書パスを明示する。`specs/reservation-spec.md` のような形式
-- 「Bundleにない」の判断は、表記ゆれを変えた複数回の検索を行った後にすること
-- 開発作業中はBundleを編集しない
-- 知識の追加・更新が必要な場合は okf-add / okf-lintスキルを使って行う。
-  執筆規約はスキル側が持つ。Bundleを直接手で編集しない
-
-### コード
-
-- Bundleとコードの記述が矛盾する場合はコードの現状を正とし、矛盾を発見したことをユーザーに報告する
-- Bundleの更新は人間の確認のうえokf-add / okf-lintスキルの規約に従って行う
-
-## 利用可能なツール
-
-Bundleを検索・追加・検査するツールはワークスペースルートの`.claude/`で一元管理する。
-Bundle自体はコーパスのみを持ち、ツールを同梱しない。
-
-| ツール | 種別 | 用途 |
-|---|---|---|
-| `okf-query` | サブエージェント `.claude/agents/okf-query.md` とスキル `.claude/skills/okf-query/` | Bundle検索。読み取り専用で、逐語抜粋と行番号付き出典を返す。検索戦略はスキル、実行条件はサブエージェントが持つ |
-| `okf-add` | スキル `.claude/skills/okf-add/` | 文書・参照資産の追加。本体・索引・履歴を一括更新 |
-| `okf-lint` | スキル `.claude/skills/okf-lint/` | Bundleの OKF 適合・整合性チェック |
+@docs/records/index.md

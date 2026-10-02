@@ -1,4 +1,4 @@
-// スタブ: 予約受付API。仕様は knowledge/specs/reservation-spec.md を参照。
+// スタブ: 予約受付API。人数上限の理由は docs/records/adr/0004-large-party-by-phone.md を参照する。
 import { sendReservationMail } from "../../../lib/mail";
 
 const MAX_PARTY_SIZE = 8;
@@ -8,7 +8,7 @@ export async function POST(request: Request) {
   const body = await request.json();
 
   if (!isValid(body)) {
-    // フロントは400前提でエラーメッセージを出し分けている(422にしないこと)
+    // フロントエンドは400を前提にエラーメッセージを切り替えるため、422にはしない。
     return new Response(JSON.stringify({ error: "validation_failed" }), { status: 400 });
   }
 

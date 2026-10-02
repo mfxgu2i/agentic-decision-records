@@ -1,32 +1,35 @@
 # example — Sakura Cafe
 
-架空のカフェサイト「Sakura Cafe」を題材にした、Agentic Knowledge Bundleの動く実例。
+架空のカフェサイト「Sakura Cafe」を題材にした、Agentic Project Recordsの実例です。
 
-- `knowledge/` — OKFバンドル。仕様書・調査メモ・Runbook・OpenAPI参照資産が入る。純粋なコーパスでツールは同梱しない
-- `sample-app/` — 文書のCitationsが指すコードスタブ。動作しない。裏取り先として実在させるためのダミー
-- `AGENTS.md` / `CLAUDE.md` / `.claude/` — ワークスペース設定一式。検索サブエージェントと、追加・lintスキル
+| パス | 内容 |
+|---|---|
+| `docs/records/` | ADRが4件、runbookが1件、issueが1件入っている。ADRのうち1件は置き換え済み |
+| `sample-app/` | 記録が触れるコードのスタブ。動作しない |
+| `AGENTS.md` | 読む・書くのルールと、索引を引用する1行 `@docs/records/index.md` |
+| `.claude/skills/record` | 記録を書くスキル。リポジトリ直下の `skills/record/` へのシンボリックリンク |
 
-## 動かし方
+## 起動方法
 
-リポジトリルートではなく、このディレクトリでClaude Codeを起動する:
+Claude Codeはリポジトリのルートではなく、このディレクトリで起動してください。v2.1.277以降が必要です。
 
 ```bash
 cd example/
 claude
 ```
 
-試しに聞いてみる:
+次のように依頼して動作を確認できます。
 
-- 「予約フォームのバリデーション仕様を教えて」
-- 「メニュー画像が更新されないんだけど」
-- 「予約APIのステータスコードを422に変えて」 → 下調べで落とし穴が検出される
-- 「lintして」
+| 頼むこと | 起きること |
+|---|---|
+| 「予約をDBに保存するようにして」 | 保存しないと決めたADRに当たり、理由を示して進めてよいかを確認してくる |
+| 「メニュー画像が更新されないんだけど」 | issueに書かれた原因と、runbookのキャッシュパージにたどり着く |
+| 「画像URLにハッシュを付けて」 | 恒久対処の方式が未決だというissueに当たり、進める前に伝えてくる |
+| 「画像はWebPに統一することにした。残しておいて」 | recordがADRを1件書き、索引に足す |
 
 ## 注意
 
-`.claude/` 配下の agents/okf-query.md・skills/okf-add/・skills/okf-lint/・skills/okf-query/ と、
-`knowledge/AGENTS.md`・`knowledge/CLAUDE.md` は `../template/` と同一コピーを維持している。
-変更するときは両方に反映すること。
-執筆・更新の規約はスキル側の `.claude/skills/` が持ち、`knowledge/AGENTS.md` は
-バンドルを読むための構造説明に限定している。
-このexampleに固有なのはナレッジ文書の中身と `sample-app/` だけ。
+このディレクトリには、[README](../README.md) の導入手順をそのまま適用しています。
+`.claude/skills/record` は、リポジトリ直下の [skills/record/](../skills/record/) を指すシンボリックリンクです。スキルの正本はそちらにあります。
+`AGENTS.md` の「プロジェクトの記録」の節は、`skills/record/AGENTS-md-section.md` と同じ内容に保ちます。変更するときは `AGENTS-md-section.md` を先に直し、その内容をこちらに反映してください。
+このexample固有の内容は、`docs/records/` と `sample-app/` だけです。
