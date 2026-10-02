@@ -1,6 +1,6 @@
 ---
 type: adr
-description: "予約の人数上限を変える前に読む。上限の8名は店舗の運用で決まっており、技術上の制約ではない"
+description: "予約の人数上限を変える前に読む"
 status: accepted
 date: 2026-07-17
 ---

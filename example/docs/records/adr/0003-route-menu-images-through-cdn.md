@@ -1,6 +1,6 @@
 ---
 type: adr
-description: "画像URLを扱うコードを書く前に読む。CMSが返すURLを直接使わず、必ずgetMenuImageUrl()を通す"
+description: "画像URLを扱うコードを書く前に読む"
 status: accepted
 date: 2026-07-10
 ---

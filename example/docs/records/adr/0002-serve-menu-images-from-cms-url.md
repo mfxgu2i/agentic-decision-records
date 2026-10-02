@@ -1,6 +1,6 @@
 ---
 type: adr
-description: "メニュー画像の配信経路の経緯を知りたいときに読む。初期はCMSのURLをそのまま使っていた"
+description: "メニュー画像の配信経路の経緯を知りたいときに読む"
 status: superseded
 superseded_by: 0003-route-menu-images-through-cdn.md
 date: 2026-06-10
