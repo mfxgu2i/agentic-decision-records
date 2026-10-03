@@ -19,7 +19,7 @@ date: 2026-07-10
 | CDNを挟み、CMSのURLを使い続ける箇所は個別に直す | 修正漏れが起きる。配信先を変えるたびに全箇所を探すことになる |
 | CDNを挟み、URLの変換を1関数に集約する | 変換規則の置き場がひとつになる |
 
-## 決定
+## 決定事項
 
 メニュー画像はCDN経由で配信する。CMSのURLを画面やAPIレスポンスに直接出さず、
 必ず `getMenuImageUrl()` を通してCDNのURLに変換する。
@@ -29,4 +29,4 @@ date: 2026-07-10
 - CDNの移行やドメイン変更の影響範囲が `getMenuImageUrl()` に閉じる
 - CMSのURLを直接使うコードはレビューで差し戻す
 - CDNのキャッシュが効くため、画像の差し替えがすぐには反映されなくなる。
-  当面の扱いは [キャッシュ更新の方式が決まるまでの取り決め](0005-keep-image-url-format-until-cache-strategy.md) にある
+  当面の扱いは [キャッシュ更新の方式を決める論点](0005-keep-image-url-format-until-cache-strategy.md) にある

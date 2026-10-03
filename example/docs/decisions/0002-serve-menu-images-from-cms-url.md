@@ -18,7 +18,7 @@ superseded_by: 0003-route-menu-images-through-cdn.md
 | CMSが返すURLをそのまま使う | 配信経路がCMSだけで済む |
 | 画像の配信にCDNを挟む | 設定と運用の対象が増える。初期の規模では不要と判断した |
 
-## 決定
+## 決定事項
 
 メニュー画像には、CMSのAPIが返すURLを加工せずに使う。
 

@@ -1,4 +1,4 @@
-# Sakura Cafe の決定
+# Sakura Cafe の決定事項
 
 - [予約データを永続化せず、メール通知だけにする](0001-no-reservation-persistence.md) — 予約の保存、一覧、変更、キャンセルの機能を追加する前に読む
 - [メニュー画像はCDN経由で配信し、URL変換を1関数に集約する](0003-route-menu-images-through-cdn.md) — 画像URLを扱うコードを書く前に読む
