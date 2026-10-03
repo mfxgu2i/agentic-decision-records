@@ -1,4 +1,4 @@
-// スタブ: 予約確認メールを送信する。予約を保存しない理由は docs/records/adr/0001-no-reservation-persistence.md を参照する。
+// スタブ: 予約確認メールを送信する。予約を保存しない理由は docs/decisions/0001-no-reservation-persistence.md を参照する。
 export async function sendReservationMail(reservation: {
   name: string;
   email: string;

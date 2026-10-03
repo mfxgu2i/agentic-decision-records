@@ -1,4 +1,4 @@
-// スタブ: 予約受付API。人数上限の理由は docs/records/adr/0004-large-party-by-phone.md を参照する。
+// スタブ: 予約受付API。人数上限の理由は docs/decisions/0004-large-party-by-phone.md を参照する。
 import { sendReservationMail } from "../../../lib/mail";
 
 const MAX_PARTY_SIZE = 8;
