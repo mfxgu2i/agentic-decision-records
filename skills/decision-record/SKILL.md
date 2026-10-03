@@ -17,18 +17,14 @@ description: プロジェクトの決定事項とその理由を `docs/decisions
 
 | 依頼の例 | 既存の記録 | 操作 | 参照ファイル |
 |---|---|---|---|
-| 「残しておいて」「決定として残して」 | なし | `accepted` で作成 | 下記の「記録を作成する」と、`references/decision.md` の「記録を作成する」 |
+| 「残しておいて」「決定として残して」 | なし | `accepted` で作成 | 下記の「記録を作成する」と、`references/decision.md` の「本文の雛形」 |
 | 「検討中として残して」「決まるまでこうしておく」 | なし | `proposed` で作成 | 同上 |
 | 「〜は見送ることにした」 | なし | `rejected` で作成 | 同上 |
-| 「候補が増えた」「当面の取り決めを変える」 | `proposed` | 本文を最新の状態に上書き | `references/decision.md` の「議論中の論点」 |
-| 「〜に決まった」 | `proposed` | `accepted` に変更 | `references/decision.md` の「論点が決着した」 |
-| 「〜は見送ることにした」 | `proposed` | 候補が1つなら `rejected` に変更。複数の候補をどれも採らないなら `accepted` に変更 | 同上 |
-| 「この論点はもういい」「この件はやめる」 | `proposed` | 論点が不要になったとして `rejected` に変更 | 同上 |
-| 「〜は見送ることにした」 | `accepted` | ユーザーに確認したうえで、廃止するか置き換える。`rejected` には変更しない | `references/decision.md` の「決定事項を廃止する」か「決定事項を別の方針に変える」 |
-| 「〜に変えることにした」 | `accepted` | 新しい記録で置き換え、旧記録を `superseded` に変更 | `references/decision.md` の「記録を作成する」と「決定事項を別の方針に変える」 |
-| 「この決定はやめる」 | `accepted` | `deprecated` に変更 | `references/decision.md` の「決定事項を廃止する」 |
-
-`superseded` と `deprecated` は、後継の方針があるかどうかで使い分けます。人数上限を外すなら `deprecated`、人数上限を別の値に変えるなら `superseded` です。
+| 「候補が増えた」「当面の取り決めを変える」 | `proposed` | 論点を更新 | `references/decision.md` の「議論中の論点」 |
+| 「〜に決まった」「〜は見送ることにした」「この論点はもういい」「この件はやめる」 | `proposed` | 論点を決着 | `references/decision.md` の「論点が決着した」 |
+| 「〜に変えることにした」 | `accepted` | 置き換え | `references/decision.md` の「本文の雛形」と「決定事項を別の方針に変える」 |
+| 「この決定はやめる」 | `accepted` | 廃止 | `references/decision.md` の「決定事項を廃止する」 |
+| 「〜は見送ることにした」 | `accepted` | 置き換えか廃止かをユーザーに確認 | 上の2行のどちらか |
 
 依頼時の表現と実際の操作が一致しない場合があります。既存の決定記録と索引を確認したうえで、操作を確定します。
 
@@ -77,13 +73,13 @@ description: プロジェクトの決定事項とその理由を `docs/decisions
 
 ### 4. ステータスを選定する
 
-`references/decision.md` の「ステータス」から、新規作成で使える `accepted`、`proposed`、`rejected` のいずれかを選びます。
+`references/decision.md` の「ステータス」から、新規作成で使えるものを選びます。
 
 1つのドキュメントに記録するのは1つの決定事項か論点のみです。参照すべきタイミングを `description` の1文で表しきれない場合は、複数の記録に分割します。
 
 ### 5. 決定記録の本文を作成し、索引へ登録する
 
-`references/decision.md` の「記録を作成する」に従って本文ファイルを作成します。ディレクトリが存在しない場合は新規作成します。
+`references/decision.md` の「本文の雛形」に従って本文ファイルを作成します。ディレクトリが存在しない場合は新規作成します。
 
 続けて `docs/decisions/index.md` に1行追加します。番号順を保って追記します。
 
