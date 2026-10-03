@@ -46,7 +46,7 @@ Project decisions and their reasons, written by coding agents and curated by hum
 
 2. 作業の中で「この決定を残しておいて」と頼みます。decision-recordスキルがドキュメントを作成し、索引に追加します。
 
-最初の決定を残すときに、スキルが索引 `docs/decisions/index.md` を作り、`AGENTS.md` の末尾に決定を読むルールを追加します。決定を残す前に仕組みだけ用意したいときは、「記録の仕組みをセットアップして」と依頼します。
+最初の決定を残すときに、スキルが索引 `docs/decisions/index.md` を作り、`AGENTS.md` の末尾に決定を読むルールを追加します。
 
 ## Limitations
 
