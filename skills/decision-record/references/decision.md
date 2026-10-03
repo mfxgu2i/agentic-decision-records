@@ -33,7 +33,7 @@
 ## 本文の雛形
 
 保存先は `docs/decisions/NNNN-<kebab-case>.md` です。
-ファイル番号は `docs/decisions/` 内の最大番号に1を加え、4桁でゼロ埋めします。最初の1件は `0001` です。
+ファイル番号は、プロジェクトのルートで `node <このスキルのディレクトリ>/scripts/check-decisions.mjs --next-number` を実行して決めます。Node が使えない環境では、`docs/decisions/` 内の最大番号に1を加え、4桁でゼロ埋めします。
 
 ```markdown
 ---
