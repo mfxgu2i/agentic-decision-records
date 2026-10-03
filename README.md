@@ -1,6 +1,6 @@
 # Agentic Decision Record
 
-Project decisions and their reasons, written by coding agents and curated by humans — kept as plain Markdown in your repo. No database, no dependencies beyond Node.
+Project decisions and their reasons, written by coding agents and curated by humans — kept as plain Markdown in your repo.
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 
